@@ -33,19 +33,48 @@ public class Cardiograma extends ActionBarActivity {
 
     private void drawLine(int[] values) {
 
-        Bitmap graphBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.vitorcardiograma);
+        int x = 0, y = 0;
+        Bitmap graphBitmap = BitmapFactory.decodeResource(getResources(), R.drawable
+                .vitorcardiograma1);
 
         int width = graphBitmap.getWidth();
         int height = graphBitmap.getHeight();
-        Log.d("width and height: " , String.valueOf(width) + " - " + String.valueOf(height));
+        Log.d("width and height: ", String.valueOf(width) + " - " + String.valueOf(height));
         Bitmap bitmapWithCanvas = Bitmap.createBitmap(width, height, Bitmap.Config
                 .ARGB_8888);
         Canvas canvas = new Canvas(bitmapWithCanvas);
-        canvas.drawBitmap(graphBitmap,0,0,null);
+        canvas.drawBitmap(graphBitmap, 0, 0, null);
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(Color.BLACK);
         paint.setStrokeWidth(30);
-        canvas.drawLine(width / 2, height / 2, width - 80, height - 30, paint);
+
+        int di = values[0];
+        int dii = values[1];
+        int diii = values[2];
+        int avr = values[3];
+        int avl = values[4];
+        int avf = values[5];
+
+        if(di!=0 && avf!= 0){
+
+            x = di;
+            y = -avf;
+
+        }else if(dii!=0 && avl!=0){
+            //needs axis rotation
+            y = (int) (-dii * Math.cos(30.0) + (-avl) * Math.sin(30.0));
+            x = (int) (dii * Math.sin(30.0) + avl * Math.cos(30.0));
+
+        }else if(diii != 0 && avr != 0){
+            //needs axis rotation
+
+            y = (int) (-diii * Math.cos(30.0) + avl * Math.sin(30.0));
+            x = (int) (-diii * Math.sin(30.0) + (-avl) * Math.cos(30.0));
+        }
+
+
+
+        canvas.drawLine(width / 2, height / 2, width/2 + x*(380/15), height + y*(380/15), paint);
 
         mImageView.setImageBitmap(bitmapWithCanvas);
 
