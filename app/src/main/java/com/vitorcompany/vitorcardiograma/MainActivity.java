@@ -3,11 +3,14 @@ package com.vitorcompany.vitorcardiograma;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.NumberPicker;
+
+import java.util.Arrays;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -15,13 +18,14 @@ public class MainActivity extends ActionBarActivity {
 
     NumberPicker di,dii,diii,avr,avl,avf;
     Button button;
+    String[] nums = {"-15","-14","-13","-12","-12","-11","-9","-8","-7","-6","-5","-4"
+            ,"-3","-2","-1","0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
+        ;
         di = (NumberPicker) findViewById(R.id.numberPickerDI);
         dii = (NumberPicker) findViewById(R.id.numberPickerDII);
         diii = (NumberPicker) findViewById(R.id.numberPickerDIII);
@@ -38,18 +42,37 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+    public int [] getValues() {
+
+        //Numberpicker values are their position
+        int [] values = {
+                di.getValue()-15,
+                dii.getValue()-15,
+                diii.getValue()-15,
+                avr.getValue()-15,
+                avl.getValue()-15,
+                avf.getValue()-15
+        };
+        Log.d("values =", Arrays.toString(values));
+        return values;
+    }
+
     public void setValues(NumberPicker numberPicker){
 
-        numberPicker.setMaxValue(30);
+        //Strings are just visual, their real values are their positions
+        //value -15 -> position 0
+        //value  -3 -> position 12
+
         numberPicker.setMinValue(0);
+        numberPicker.setMaxValue(30);
+        numberPicker.setDisplayedValues(nums);
         numberPicker.setValue(15);
-        numberPicker.setWrapSelectorWheel(false);
 
     }
 
     public void buttonHandler(View view){
         Intent intent = new Intent(this, Cardiograma.class);
-        intent.putExtra(EXTRA_MESSAGE, message);
+        intent.putExtra("input", getValues());
         startActivity(intent);
 
     }
